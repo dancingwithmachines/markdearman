@@ -248,6 +248,13 @@ button { font: inherit; color: inherit; }
 }
 body.video-open .video-backdrop { opacity: 1; pointer-events: auto; }
 
+/* Lift the player above the backdrop when open. The floating player's z-index (60)
+   is trapped inside .video-slot's stacking context (z-index:1), which sits BELOW the
+   backdrop (50) at page level — so the backdrop would otherwise swallow every hover
+   and click on the player. Raising the whole container above the backdrop fixes it;
+   outside-the-player clicks still land on the backdrop (which fills the viewport). */
+body.video-open .video-slot { z-index: 70; }
+
 /* ============================================================
    BRANDS
    ============================================================ */
