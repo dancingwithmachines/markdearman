@@ -336,6 +336,11 @@ body.video-open .video-slot { z-index: 70; }
     scroll-snap-align: start;
     background: var(--box);             /* all boxed on mobile */
   }
+  /* Wide logos are width-capped, so they'd shrink in the narrower mobile cell.
+     Bump max-width here so they render at their desktop size on mobile too. */
+  .logo-cell img[src*="logo_microsoft"]      { max-width: 63%; }
+  .logo-cell img[src*="logo_oliver-peoples"] { max-width: 79%; }
+  .logo-cell img[src*="logo_tiffany"]        { max-width: 69%; }
 }
 
 /* Respect reduced-motion */
