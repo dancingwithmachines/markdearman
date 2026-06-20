@@ -105,6 +105,8 @@ button { font: inherit; color: inherit; }
   .bar-link:hover .roll-in { transform: translateY(-100%); }
 }
 .bar-tools li::before { content: "• "; }
+/* Redshift label: full above 480px, abbreviated "(RS)" at/below 480px */
+.rs-short { display: none; }
 /* Header slides up with the hero when the video expands */
 #header { transition: transform var(--t-exp) var(--quart-in-out); will-change: transform; }
 
@@ -341,6 +343,12 @@ body.video-open .video-slot { z-index: 70; }
   .logo-cell img[src*="logo_microsoft"]      { max-width: 63%; }
   .logo-cell img[src*="logo_oliver-peoples"] { max-width: 79%; }
   .logo-cell img[src*="logo_tiffany"]        { max-width: 69%; }
+}
+
+/* Narrow phones: abbreviate "(Redshift)" → "(RS)" in the footer/header tools */
+@media (max-width: 480px) {
+  .rs-full  { display: none; }
+  .rs-short { display: inline; }
 }
 
 /* Respect reduced-motion */
