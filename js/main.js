@@ -35,8 +35,8 @@
   var expandTimer, collapseTimer;   // fallbacks if transitionend doesn't fire
 
   /* ----- LONDON CLOCK ----------------------------------------------------
-     Ticks every second in Europe/London (auto GMT/BST). Label kept literally
-     as "GMT" to match the design — flagged for Mark to confirm re: BST. */
+     Ticks every second in Europe/London (the time auto-tracks GMT/BST). The
+     label is kept literally as "GMT" to match the design, including in BST. */
   var clockFmt = new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Europe/London', hour: '2-digit', minute: '2-digit',
     second: '2-digit', hour12: false
