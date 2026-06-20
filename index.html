@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Mark Dearman — 3D Artist &amp; Motion Designer</title>
+  <meta name="description" content="3D Artist &amp; Motion Designer based in Bristol, UK. I've worked on projects for a wide range of global brands including Gucci, Apple, H&amp;M, Ford, Disney, Tod's, Amazon, Oliver Peoples, Hyundai, Tiffany &amp; Co, Microsoft and Nike, to name but a few.">
+
+  <!-- Open Graph (optional, nice for link sharing) -->
+  <meta property="og:title" content="Mark Dearman — 3D Artist &amp; Motion Designer">
+  <meta property="og:description" content="3D Artist &amp; Motion Designer based in Bristol, UK.">
+  <meta property="og:type" content="website">
+
+  <meta name="theme-color" content="#000000">
+
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="apple-touch-icon" href="assets/favicon.png">
+
+  <link rel="preload" href="fonts/ld_techd-regular-webfont.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="fonts/PlusJakartaSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ============ HEADER ============ -->
+  <header class="bar wrap" id="header">
+    <div class="bar-col">
+      <span class="bar-label">Email</span>
+      <a class="bar-link" href="mailto:ascii@markdearman.com"><span class="roll"><span class="roll-in" data-text="ascii@markdearman.com">ascii@markdearman.com</span></span></a>
+    </div>
+    <div class="bar-col">
+      <span class="bar-label">Feed</span>
+      <a class="bar-link" href="https://www.instagram.com/markdearman" target="_blank" rel="noopener"><span class="roll"><span class="roll-in" data-text="Instagram">Instagram</span></span></a>
+    </div>
+    <div class="bar-col">
+      <span class="bar-label">Location</span>
+      <span class="bar-text">United Kingdom</span>
+      <span class="bar-text gmt-time">GMT --:--:--</span>
+    </div>
+    <div class="bar-col">
+      <span class="bar-label">Tools</span>
+      <ul class="bar-tools">
+        <li>Cinema 4D (Redshift)</li>
+        <li>Houdini</li>
+        <li>After Effects</li>
+        <li>AI</li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+    <!-- ============ HERO + VIDEO ============ -->
+    <section class="hero wrap">
+      <p class="hero-name">MARK DEARMAN</p>
+      <h1 class="hero-type" id="heroType">3D ARTIST<br>&amp; MOTION<br>DESIGNER</h1>
+
+      <div class="video-slot" id="videoSlot">
+        <div class="video-player" id="videoPlayer">
+          <img class="video-poster" id="videoPoster" src="assets/video_poster.png" alt="">
+          <video class="video-el" id="videoEl" loop playsinline preload="none"></video>
+
+          <!-- Center play / pause (docked: opens; open: toggles playback).
+               Uses supplied artwork. The ring is a separate <circle> so it can
+               shrink 30% on hover while stroke-width stays constant. -->
+          <button class="ctl ctl-play" id="ctlPlay" type="button" aria-label="Play video">
+            <svg class="ctl-svg icon-play" viewBox="0 0 123.11 123.11" aria-hidden="true">
+              <circle class="ctl-circle" cx="61.56" cy="61.56" r="60.06" fill="none" stroke="#fff" stroke-width="3"/>
+              <path d="M77.58,58.93l-23.01-13.29c-2.02-1.17-4.54.29-4.54,2.62v26.57c0,2.33,2.52,3.79,4.54,2.62l23.01-13.29c2.02-1.17,2.02-4.08,0-5.25Z" fill="#fff"/>
+            </svg>
+            <svg class="ctl-svg icon-pause" viewBox="0 0 123.11 123.11" aria-hidden="true">
+              <circle class="ctl-circle" cx="61.56" cy="61.56" r="60.06" fill="none" stroke="#fff" stroke-width="3"/>
+              <rect x="47.06" y="43.56" width="9" height="36" rx="4.5" ry="4.5" fill="#fff"/>
+              <rect x="67.06" y="43.56" width="9" height="36" rx="4.5" ry="4.5" fill="#fff"/>
+            </svg>
+          </button>
+
+          <!-- Mute (top-left) — only visible when expanded -->
+          <button class="ctl ctl-mute" id="ctlMute" type="button" aria-label="Mute">
+            <svg class="ctl-svg icon-unmute" viewBox="0 0 83.11 83.11" aria-hidden="true">
+              <circle cx="41.56" cy="41.56" r="40.06" fill="none" stroke="#fff" stroke-width="3"/>
+              <path d="M43.36,25.03c-.64-.34-1.42-.31-2.02.1l-11.33,7.55h-5.32c-1.09,0-1.97.88-1.97,1.97v11.83c0,1.09.88,1.97,1.97,1.97h5.32l11.33,7.55c.92.59,2.15.33,2.74-.59.2-.31.31-.67.32-1.05v-27.6c0-.73-.4-1.4-1.04-1.74Z" fill="#fff"/>
+              <rect x="48.32" y="32.89" width="4.01" height="16.8" rx="2" ry="2" fill="#fff"/>
+              <rect x="55.1" y="29.85" width="4.01" height="24.06" rx="2" ry="2" fill="#fff"/>
+            </svg>
+            <svg class="ctl-svg icon-muted" viewBox="0 0 83.11 83.11" aria-hidden="true">
+              <circle cx="41.56" cy="41.56" r="40.06" fill="none" stroke="#fff" stroke-width="3"/>
+              <path d="M43.36,25.03c-.64-.34-1.42-.31-2.02.1l-11.33,7.55h-5.32c-1.09,0-1.97.88-1.97,1.97v11.83c0,1.09.88,1.97,1.97,1.97h5.32l11.33,7.55c.92.59,2.15.33,2.74-.59.2-.31.31-.67.32-1.05v-27.6c0-.73-.4-1.4-1.04-1.74Z" fill="#fff"/>
+              <rect x="53.87" y="32.63" width="4.01" height="16.8" rx="2" ry="2" transform="translate(45.38 -27.49) rotate(45)" fill="#fff"/>
+              <rect x="53.87" y="32.63" width="4.01" height="16.8" rx="2" ry="2" transform="translate(124.39 30.53) rotate(135)" fill="#fff"/>
+            </svg>
+          </button>
+
+          <!-- Close (top-right) — only visible when expanded -->
+          <button class="ctl ctl-close" id="ctlClose" type="button" aria-label="Close video">
+            <svg class="ctl-svg" viewBox="0 0 83.11 83.11" aria-hidden="true">
+              <circle cx="41.56" cy="41.56" r="40.06" fill="none" stroke="#fff" stroke-width="3"/>
+              <path d="M29.15,53.97c.68.69,1.58,1.03,2.47,1.03s1.79-.35,2.47-1.03l7.46-7.46,7.46,7.46c.68.69,1.58,1.03,2.47,1.03s1.79-.35,2.47-1.03c1.37-1.37,1.37-3.58,0-4.95h.02l-7.46-7.46,7.46-7.46c1.37-1.37,1.37-3.58,0-4.95s-3.58-1.37-4.95,0l-7.46,7.46-7.46-7.46c-1.37-1.37-3.58-1.37-4.95,0s-1.37,3.58,0,4.95l7.46,7.46-7.46,7.46c-1.37,1.37-1.37,3.58,0,4.95Z" fill="#fff"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ BRANDS ============ -->
+    <section class="brands wrap">
+      <h2 class="brands-title">BRANDS</h2>
+      <div class="brands-track" id="brandsTrack">
+        <div class="logo-cell boxed"><img src="assets/logos/SVG/logo_apple.svg" alt="Apple"></div>
+        <div class="logo-cell"><img src="assets/logos/SVG/logo_tiffany.svg" alt="Tiffany & Co."></div>
+        <div class="logo-cell boxed"><img src="assets/logos/SVG/logo_gucci.svg" alt="Gucci"></div>
+        <div class="logo-cell"><img src="assets/logos/SVG/logo_ford.svg" alt="Ford"></div>
+        <div class="logo-cell"><img src="assets/logos/SVG/logo_tods.svg" alt="Tod's"></div>
+        <div class="logo-cell boxed"><img src="assets/logos/SVG/logo_disney.svg" alt="Disney"></div>
+        <div class="logo-cell"><img src="assets/logos/SVG/logo_oliver-peoples.svg" alt="Oliver Peoples"></div>
+        <div class="logo-cell boxed"><img src="assets/logos/SVG/logo_microsoft.svg" alt="Microsoft"></div>
+        <div class="logo-cell boxed"><img src="assets/logos/SVG/logo_amazon.svg" alt="Amazon"></div>
+        <div class="logo-cell"><img src="assets/logos/SVG/logo_HM.svg" alt="H&M"></div>
+        <div class="logo-cell boxed"><img src="assets/logos/SVG/logo_hyundai.svg" alt="Hyundai"></div>
+        <div class="logo-cell"><img src="assets/logos/SVG/logo_nike.svg" alt="Nike"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ FOOTER (repeat of header) ============ -->
+  <footer class="bar wrap" id="footer">
+    <div class="bar-col">
+      <span class="bar-label">Email</span>
+      <a class="bar-link" href="mailto:ascii@markdearman.com"><span class="roll"><span class="roll-in" data-text="ascii@markdearman.com">ascii@markdearman.com</span></span></a>
+    </div>
+    <div class="bar-col">
+      <span class="bar-label">Feed</span>
+      <a class="bar-link" href="https://www.instagram.com/markdearman" target="_blank" rel="noopener"><span class="roll"><span class="roll-in" data-text="Instagram">Instagram</span></span></a>
+    </div>
+    <div class="bar-col">
+      <span class="bar-label">Location</span>
+      <span class="bar-text">United Kingdom</span>
+      <span class="bar-text gmt-time">GMT --:--:--</span>
+    </div>
+    <div class="bar-col">
+      <span class="bar-label">Tools</span>
+      <ul class="bar-tools">
+        <li>Cinema 4D (Redshift)</li>
+        <li>Houdini</li>
+        <li>After Effects</li>
+        <li>AI</li>
+      </ul>
+    </div>
+  </footer>
+
+  <!-- Backdrop for expanded video; catches "click outside to close" -->
+  <div class="video-backdrop" id="videoBackdrop"></div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>

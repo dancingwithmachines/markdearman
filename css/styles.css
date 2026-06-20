@@ -1,0 +1,336 @@
+/* =========================================================
+   Mark Dearman — single page site
+   Vanilla CSS. Breakpoints: desktop (<=1280 caps), mobile (<=768).
+   ========================================================= */
+
+/* ---------- Fonts ---------- */
+/* LD_TechD — supplied display typeface (Regular). */
+@font-face {
+  font-family: 'LD_TechD';
+  src: url('../fonts/ld_techd-regular-webfont.woff2') format('woff2'),
+       url('../fonts/ld_techd-regular-webfont.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+/* Plus Jakarta Sans — self-hosted variable font (covers Regular 400 + Bold 700). */
+@font-face {
+  font-family: 'Plus Jakarta Sans';
+  src: url('../fonts/PlusJakartaSans-Variable.woff2') format('woff2');
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #000;
+  --fg: #fff;
+  --label: #d2d2d2;
+  --muted: #8c8c8c;
+  --box: #161616;
+  --video-bg: #202020;
+
+  --max: 1280px;
+  --gutter: 20px;
+
+  /* easings */
+  --quart-out: cubic-bezier(0.165, 0.84, 0.44, 1);
+  --quart-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+
+  /* durations */
+  --t-play: 0.5s;   /* play-button hover */
+  --t-ctl: 0.35s;   /* control fades */
+  --t-exp: 0.8s;    /* video expand/collapse + hero move */
+  --t-roll: 0.5s;   /* header/footer link rollover (1/2s each way) */
+
+  --display: 'LD_TechD', 'Arial Narrow', 'Haettenschweiler', sans-serif;
+  --body: 'Plus Jakarta Sans', system-ui, -apple-system, Arial, sans-serif;
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+body.video-open { overflow: hidden; }
+ul { margin: 0; padding: 0; list-style: none; }
+img, svg, video { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+
+/* ---------- Layout container ----------
+   Desktop: content caps at 1280, no side margins.
+   Mobile: 30px side margins (handled in the media query). */
+.wrap { width: min(var(--max), 100%); margin-inline: auto; }
+/* Below the 1280 breakpoint the content gets 30px side margins */
+@media (max-width: 1279.98px) { .wrap { width: calc(100% - 60px); } }
+
+/* ============================================================
+   HEADER / FOOTER BARS
+   ============================================================ */
+.bar {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  column-gap: var(--gutter);
+  padding-block: 30px;
+  font-size: 14px;
+  line-height: 1.55;
+  letter-spacing: 0.2px;
+  color: var(--muted);                  /* all header/footer text grey... */
+}
+.bar-col { grid-column: span 2; display: flex; flex-direction: column; }
+.bar-label { font-weight: 700; }        /* labels grey (inherits .bar) */
+/* .bar-link is white (set in the rollover block) — the only non-grey text */
+/* Link rollover — vertical text roll. The label rolls up out of view while an
+   identical clone rolls up into its place from below (masked by .roll).
+   ease-out-quart, 0.667s; one transition covers both roll-on and roll-off. */
+.bar-link { display: inline-block; width: fit-content; color: var(--fg); }
+.roll { display: inline-block; overflow: hidden; vertical-align: top; }
+.roll-in { display: block; position: relative; transition: transform var(--t-roll) var(--quart-out); }
+.roll-in::after {
+  content: attr(data-text);
+  position: absolute; left: 0; top: 100%;
+  white-space: nowrap;
+}
+@media (hover: hover) {
+  .bar-link:hover .roll-in { transform: translateY(-100%); }
+}
+.bar-tools li::before { content: "• "; }
+/* Header slides up with the hero when the video expands */
+#header { transition: transform var(--t-exp) var(--quart-in-out); will-change: transform; }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  column-gap: var(--gutter);
+  padding-top: 56px;
+}
+.hero-name {
+  grid-column: 1 / -1;
+  margin: 0 0 26px;
+  font-family: var(--display);
+  font-size: clamp(28px, 4.22vw, 54px);   /* matches BRANDS (54px on desktop) */
+  letter-spacing: 0.04em;
+  transition: transform var(--t-exp) var(--quart-in-out);
+  will-change: transform;
+}
+.hero-type {
+  grid-column: 1 / -1;
+  position: relative;
+  z-index: 2;
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(56px, 11.8vw, 150px);
+  line-height: 0.92;
+  letter-spacing: 0.01em;
+  pointer-events: none;                 /* clicks pass through to video below the overlap */
+  transition: transform var(--t-exp) var(--quart-in-out);
+  will-change: transform;
+}
+
+/* ============================================================
+   VIDEO PLAYER
+   ============================================================ */
+.video-slot {
+  grid-column: 2 / span 6;              /* starts at column 2 → centred */
+  position: relative;
+  aspect-ratio: 16 / 9;
+  margin-top: -70px;                    /* top edge sits ~halfway down DESIGNER */
+  z-index: 1;
+}
+
+.video-player {
+  position: absolute;
+  inset: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--video-bg);
+  cursor: pointer;
+  transition:
+    top    var(--t-exp) var(--quart-in-out),
+    left   var(--t-exp) var(--quart-in-out),
+    width  var(--t-exp) var(--quart-in-out),
+    height var(--t-exp) var(--quart-in-out);
+}
+.video-player.is-floating {
+  position: fixed;
+  inset: auto;                          /* JS drives top/left/width/height */
+  z-index: 60;
+  cursor: default;
+}
+
+.video-poster,
+.video-el {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.video-poster { opacity: 1; transition: opacity var(--t-exp) var(--quart-in-out); }
+.video-el { opacity: 0; transition: opacity var(--t-ctl) var(--quart-out); }
+
+/* While expanded: poster fades out (during the scale-up, and back in on collapse) */
+.video-player.is-expanded .video-poster { opacity: 0; }
+/* Video fades in once the box is full size; drops to 60% while controls are visible.
+   Tied to video-ready (not is-playing) so pausing keeps the frame visible. */
+.video-player.is-expanded.video-ready .video-el { opacity: 1; }
+.video-player.is-expanded.video-ready.controls-visible .video-el { opacity: 0.6; }
+
+/* ---------- Controls (shared) — supplied SVG artwork ---------- */
+.ctl {
+  position: absolute;
+  width: 96px; height: 96px;
+  padding: 0; border: 0; background: none;
+  color: var(--fg);
+  cursor: pointer;
+}
+.ctl-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+/* Center play / pause */
+.ctl-play { top: 50%; left: 50%; transform: translate(-50%, -50%); }
+/* hover: outer ring shrinks 30% while stroke stays constant (3 / 0.7 = 4.286) */
+.ctl-play .ctl-circle {
+  transform-box: fill-box; transform-origin: center;
+  transition: transform var(--t-play) var(--quart-out), stroke-width var(--t-play) var(--quart-out);
+}
+@media (hover: hover) {
+  .ctl-play:hover .ctl-circle { transform: scale(0.7); stroke-width: 4.286px; }
+}
+.icon-pause, .icon-muted { display: none; }
+.video-player.is-playing .icon-play { display: none; }
+.video-player.is-playing .icon-pause { display: block; }
+
+/* Mute (top-left) + Close (top-right): sized to the 83:123 viewBox ratio of the
+   supplied icons so the stroke weight matches the play button; scale 80% on hover */
+.ctl-mute, .ctl-close { width: 65px; height: 65px; }
+.ctl-mute  { top: 22px; left: 22px; }
+.ctl-close { top: 22px; right: 22px; }
+@media (hover: hover) {
+  .ctl-mute:hover, .ctl-close:hover { transform: scale(0.8); }
+}
+.video-player.is-muted .icon-unmute { display: none; }
+.video-player.is-muted .icon-muted { display: block; }
+
+/* ---------- Control visibility states ----------
+   Docked: only the center play button shows.
+   Expanded: all three controls fade together on hover. */
+.ctl-mute, .ctl-close { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.video-player.is-floating .ctl-mute,
+.video-player.is-floating .ctl-close { visibility: visible; }
+
+.video-player.is-floating .ctl { opacity: 0; pointer-events: none; transition: opacity var(--t-ctl) var(--quart-out), transform var(--t-play) var(--quart-out); }
+.video-player.is-floating.controls-visible .ctl { opacity: 1; pointer-events: auto; }
+
+/* ---------- Backdrop (catches outside clicks; page is already black so kept transparent) ---------- */
+.video-backdrop {
+  position: fixed; inset: 0;
+  z-index: 50;
+  background: transparent;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-exp) var(--quart-in-out);
+}
+body.video-open .video-backdrop { opacity: 1; pointer-events: auto; }
+
+/* ============================================================
+   BRANDS
+   ============================================================ */
+.brands { margin-top: 120px; padding-bottom: 10px; }
+
+/* Footer: extra gap after the logos, and double the space below the text */
+#footer { margin-top: 90px; padding-bottom: 60px; }
+.brands-title {
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: clamp(28px, 4.22vw, 54px);   /* 54px on desktop, matches the name */
+  margin: 0 0 28px;
+}
+.brands-track {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gutter);
+}
+.logo-cell {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 230px;
+  border-radius: 20px;
+}
+.logo-cell.boxed { background: var(--box); }
+/* Real logos vary in aspect ratio — cap by both height and width so each sits
+   balanced in its cell. Fine-tune per-logo later if any look off optically. */
+.logo-cell img { width: auto; height: auto; max-height: 38px; max-width: 52%; object-fit: contain; }
+/* Per-logo optical balancing */
+.logo-cell img[src*="logo_apple"]          { max-height: 56px; }
+.logo-cell img[src*="logo_gucci"]          { max-height: 58px; }
+.logo-cell img[src*="logo_disney"]         { max-height: 52px; max-width: 66%; }
+.logo-cell img[src*="logo_oliver-peoples"] { max-height: 29px; max-width: 65%; }
+.logo-cell img[src*="logo_tiffany"]        { max-height: 42px; max-width: 57%; }
+.logo-cell img[src*="logo_hyundai"]        { max-height: 55px; max-width: 83%; }
+.logo-cell img[src*="logo_HM"]             { max-height: 42px; max-width: 57%; }
+.logo-cell img[src*="logo_tods"]           { max-height: 26px; max-width: 40%; }
+
+/* ============================================================
+   MOBILE  (<= 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  /* .wrap margins (30px) come from the <=1279.98 rule above */
+  #header { display: none; }            /* mobile: header hidden — info lives in the footer */
+  .bar { grid-template-columns: repeat(2, 1fr); row-gap: 26px; }
+  .bar-col { grid-column: span 1; }
+
+  .hero { display: block; padding-top: 36px; }
+  /* 28px / 60px at 480w, scaling proportionally down to 320w (5.833vw=28 & 12.5vw=60 at 480) */
+  .hero-name { font-size: clamp(18.67px, 5.833vw, 28px); }
+  .hero-type { font-size: clamp(40px, 12.5vw, 60px); }
+  .brands-title { font-size: clamp(18.67px, 5.833vw, 28px); }
+
+  .video-slot {
+    width: 100%;
+    margin-top: 28px;                   /* no overlap on mobile — sits below the type */
+  }
+
+  /* Brands becomes a swipeable carousel; every logo boxed */
+  .brands { margin-top: 70px; }
+  .brands-track {
+    display: flex;
+    grid-template-columns: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scroll-padding-left: 30px;
+    scrollbar-width: none;
+    margin-inline: -30px;   /* full-bleed: boxes scroll off the screen edges, not the 30px margin */
+    padding-inline: 30px;   /* first/last box still align to the 30px content margin */
+  }
+  .brands-track::-webkit-scrollbar { display: none; }
+  .logo-cell {
+    flex: 0 0 60%;                       /* < full width so the next box crops → signals "swipe me" */
+    min-height: 200px;
+    scroll-snap-align: start;
+    background: var(--box);             /* all boxed on mobile */
+  }
+}
+
+/* Respect reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  * { transition-duration: 0.001ms !important; }
+}

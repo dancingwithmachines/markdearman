@@ -1,0 +1,15 @@
+# macOS
+.DS_Store
+
+# Video files are hosted on Cloudflare R2, NOT committed to git.
+# (GitHub rejects files >100MB; the real reel is ~250MB.)
+# A local placeholder.mp4 for testing stays out of the repo too.
+*.mp4
+*.mov
+*.webm
+
+# Internal working/resume doc — kept local, not published to the public repo.
+STATE.md
+
+# Raw source font — the site serves the .woff2/.woff webfonts, not the .ttf.
+*.ttf
