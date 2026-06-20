@@ -304,20 +304,20 @@ body.video-open .video-slot { z-index: 70; }
   .bar { grid-template-columns: repeat(2, 1fr); row-gap: 26px; }
   .bar-col { grid-column: span 1; }
 
-  .hero { display: block; padding-top: 117px; }   /* 120px to the name (incl. ~3px font offset) */
+  .hero { display: block; padding-top: 57px; }   /* 60px to the name (incl. ~3px font offset) */
   /* 28px / 60px at 480w, scaling proportionally down to 320w (5.833vw=28 & 12.5vw=60 at 480) */
-  .hero-name { font-size: clamp(18.67px, 5.833vw, 28px); margin-bottom: 38px; }   /* 70px to hero type */
+  .hero-name { font-size: clamp(18.67px, 5.833vw, 28px); margin-bottom: 3px; }   /* 35px to hero type */
   .hero-type { font-size: clamp(40px, 12.5vw, 60px); }
-  .brands-title { font-size: clamp(18.67px, 5.833vw, 28px); margin-bottom: 67px; }   /* 70px to the logo boxes */
+  .brands-title { font-size: clamp(18.67px, 5.833vw, 28px); margin-bottom: 32px; }   /* 35px to the logo boxes */
 
   .video-slot {
     width: 100%;
-    margin-top: 79px;                   /* 70px gap below the hero type (no overlap on mobile) */
+    margin-top: 44px;                   /* 35px gap below the hero type (no overlap on mobile) */
   }
 
   /* Brands becomes a swipeable carousel; every logo boxed */
-  .brands { margin-top: 117px; }        /* 120px from the video container to BRANDS */
-  #footer { margin-top: 110px; }        /* 120px from the logo grid to the footer text */
+  .brands { margin-top: 57px; }         /* 60px from the video container to BRANDS */
+  #footer { margin-top: 50px; }         /* 60px from the logo grid to the footer text */
   .brands-track {
     display: flex;
     grid-template-columns: none;
