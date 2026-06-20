@@ -25,6 +25,7 @@
   var heroType = document.getElementById('heroType');
   var heroName = document.querySelector('.hero-name');
   var headerEl = document.getElementById('header');
+  var brandsEl = document.querySelector('.brands');
   var backdrop = document.getElementById('videoBackdrop');
   var ctlPlay  = document.getElementById('ctlPlay');
   var ctlMute  = document.getElementById('ctlMute');
@@ -44,7 +45,7 @@
   var clockEls = document.querySelectorAll('.gmt-time');
   function tickClock() {
     var t = clockFmt.format(new Date());
-    for (var i = 0; i < clockEls.length; i++) clockEls[i].textContent = 'GMT ' + t;
+    for (var i = 0; i < clockEls.length; i++) clockEls[i].textContent = 'GMT  ' + t;
   }
   tickClock();
   setInterval(tickClock, 1000);
@@ -111,6 +112,15 @@
     if (heroName) heroName.style.transform = ty;
     if (headerEl) headerEl.style.transform = ty;   // header moves up with the hero
 
+    // Push the BRANDS section (title + grid) down so the expanding player never
+    // overlaps the logos when the reel is opened near the top of the page — the
+    // mirror of the hero moving up. Only moves down if it would otherwise overlap.
+    if (brandsEl) {
+      var brandsTop = brandsEl.getBoundingClientRect().top;
+      var by = Math.max(0, (target.top + target.height + HERO_GAP) - brandsTop);
+      brandsEl.style.transform = 'translateY(' + by + 'px)';
+    }
+
     setBox(player, target.top, target.left, target.width, target.height);
     loadVideoOnce();
 
@@ -157,6 +167,7 @@
     heroType.style.transform = '';
     if (heroName) heroName.style.transform = '';
     if (headerEl) headerEl.style.transform = '';
+    if (brandsEl) brandsEl.style.transform = '';
     document.body.classList.remove('video-open');
 
     // Animate back to the docked slot box. Called synchronously (no rAF) so the

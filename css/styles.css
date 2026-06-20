@@ -211,20 +211,20 @@ button { font: inherit; color: inherit; }
 @media (hover: hover) {
   .ctl-play:hover .ctl-circle { transform: scale(0.7); stroke-width: 4.286px; }
 }
-.icon-pause, .icon-muted { display: none; }
+.icon-pause, .icon-unmute { display: none; }
 .video-player.is-playing .icon-play { display: none; }
 .video-player.is-playing .icon-pause { display: block; }
 
 /* Mute (top-left) + Close (top-right): sized to the 83:123 viewBox ratio of the
    supplied icons so the stroke weight matches the play button; scale 80% on hover */
-.ctl-mute, .ctl-close { width: 65px; height: 65px; }
+.ctl-mute, .ctl-close { width: 52px; height: 52px; }
 .ctl-mute  { top: 22px; left: 22px; }
 .ctl-close { top: 22px; right: 22px; }
 @media (hover: hover) {
   .ctl-mute:hover, .ctl-close:hover { transform: scale(0.8); }
 }
-.video-player.is-muted .icon-unmute { display: none; }
-.video-player.is-muted .icon-muted { display: block; }
+.video-player.is-muted .icon-mute { display: none; }
+.video-player.is-muted .icon-unmute { display: block; }
 
 /* ---------- Control visibility states ----------
    Docked: only the center play button shows.
@@ -258,7 +258,7 @@ body.video-open .video-slot { z-index: 70; }
 /* ============================================================
    BRANDS
    ============================================================ */
-.brands { margin-top: 120px; padding-bottom: 10px; }
+.brands { margin-top: 120px; padding-bottom: 10px; transition: transform var(--t-exp) var(--quart-in-out); will-change: transform; }
 
 /* Footer: extra gap after the logos, and double the space below the text */
 #footer { margin-top: 90px; padding-bottom: 60px; }
@@ -285,14 +285,15 @@ body.video-open .video-slot { z-index: 70; }
    balanced in its cell. Fine-tune per-logo later if any look off optically. */
 .logo-cell img { width: auto; height: auto; max-height: 38px; max-width: 52%; object-fit: contain; }
 /* Per-logo optical balancing */
-.logo-cell img[src*="logo_apple"]          { max-height: 56px; }
+.logo-cell img[src*="logo_apple"]          { max-height: 56px; transform: translateY(-5px); }
 .logo-cell img[src*="logo_gucci"]          { max-height: 58px; }
 .logo-cell img[src*="logo_disney"]         { max-height: 52px; max-width: 66%; }
 .logo-cell img[src*="logo_oliver-peoples"] { max-height: 29px; max-width: 65%; }
 .logo-cell img[src*="logo_tiffany"]        { max-height: 42px; max-width: 57%; }
 .logo-cell img[src*="logo_hyundai"]        { max-height: 55px; max-width: 83%; }
-.logo-cell img[src*="logo_HM"]             { max-height: 42px; max-width: 57%; }
-.logo-cell img[src*="logo_tods"]           { max-height: 26px; max-width: 40%; }
+.logo-cell img[src*="logo_HM"]             { max-height: 44.1px; max-width: 59.85%; }
+.logo-cell img[src*="logo_tods"]           { max-height: 27.3px; max-width: 42%; }
+.logo-cell img[src*="logo_ford"]           { max-height: 39.9px; max-width: 54.6%; transform: translateY(-2px); }
 
 /* ============================================================
    MOBILE  (<= 768px)
