@@ -312,7 +312,7 @@ body.video-open .video-slot { z-index: 70; }
 
   .video-slot {
     width: 100%;
-    margin-top: 44px;                   /* 35px gap below the hero type (no overlap on mobile) */
+    margin-top: 69px;                   /* 60px gap below the hero type — RED (matches the other section gaps) */
   }
 
   /* Brands becomes a swipeable carousel; every logo boxed */
