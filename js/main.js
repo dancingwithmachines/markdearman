@@ -242,8 +242,11 @@
     if (e.key === 'Escape' && isOpen) closeVideo();
   });
 
-  // Controls fade in/out with the cursor while expanded.
-  player.addEventListener('mouseenter', function () { if (isOpen) player.classList.add('controls-visible'); });
+  // Controls fade in while the cursor is over the expanded player, out when it leaves.
+  // Use mousemove, not mouseenter: when the reel opens the cursor is already inside the
+  // player and it expands under a stationary cursor, so mouseenter never fires — any
+  // movement then reveals the controls (standard video-player behaviour).
+  player.addEventListener('mousemove', function () { if (isOpen) player.classList.add('controls-visible'); });
   player.addEventListener('mouseleave', function () { player.classList.remove('controls-visible'); });
 
   // Keep the expanded player centred on resize.
