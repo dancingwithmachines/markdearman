@@ -207,9 +207,9 @@ button { font: inherit; color: inherit; }
 .ctl-play {
   top: 50%; left: 50%; transform: translate(-50%, -50%);
   transition: opacity var(--t-ctl) var(--quart-out);
-  /* Scale 96px (100%) at ≥480 down to 67.2px (70%) at 320; pinned to 96 above 480 */
-  width: clamp(67.2px, 18vw + 9.6px, 96px);
-  height: clamp(67.2px, 18vw + 9.6px, 96px);
+  /* Scale 96px (100%) at ≥480 down to 57.6px (60%) at 320; pinned to 96 above 480 */
+  width: clamp(57.6px, 24vw - 19.2px, 96px);
+  height: clamp(57.6px, 24vw - 19.2px, 96px);
 }
 /* hover: outer ring shrinks 30% while stroke stays constant (3 / 0.7 = 4.286) */
 .ctl-play .ctl-circle {
