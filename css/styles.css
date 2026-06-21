@@ -204,7 +204,13 @@ button { font: inherit; color: inherit; }
 .ctl-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
 
 /* Center play / pause */
-.ctl-play { top: 50%; left: 50%; transform: translate(-50%, -50%); transition: opacity var(--t-ctl) var(--quart-out); }
+.ctl-play {
+  top: 50%; left: 50%; transform: translate(-50%, -50%);
+  transition: opacity var(--t-ctl) var(--quart-out);
+  /* Scale 96px (100%) at ≥480 down to 67.2px (70%) at 320; pinned to 96 above 480 */
+  width: clamp(67.2px, 18vw + 9.6px, 96px);
+  height: clamp(67.2px, 18vw + 9.6px, 96px);
+}
 /* hover: outer ring shrinks 30% while stroke stays constant (3 / 0.7 = 4.286) */
 .ctl-play .ctl-circle {
   transform-box: fill-box; transform-origin: center;
