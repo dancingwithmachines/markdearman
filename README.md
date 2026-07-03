@@ -19,7 +19,7 @@ assets/
   logos/SVG/        brand logos
   icons/SVG/        player control icons
   video_poster.png  reel poster frame
-  favicon.png
+  favicon.svg       favicon (source); favicon.ico + favicon-16/32.png + apple-touch-icon.png = fallbacks
 ```
 
 ## Run locally
