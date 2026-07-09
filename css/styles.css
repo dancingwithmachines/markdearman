@@ -317,9 +317,9 @@ body.video-open .video-slot { z-index: 70; }
   /* Type + name→type gap scale smoothly from the desktop values at 768px down to the
      mobile values at 320px (continuous with desktop — no snap at the breakpoint).
      Endpoints: hero-name 32.41→18.67, hero-type 90.62→43.2, name-gap 40→11. */
-  .hero-name { font-size: clamp(21.34px, 2.471vw + 13.433px, 32.41px); margin-bottom: clamp(6px, 7.589vw - 18.286px, 40px); }
+  .hero-name { font-size: clamp(23.34px, 2.025vw + 16.861px, 32.41px); margin-bottom: clamp(6px, 7.589vw - 18.286px, 40px); }
   .hero-type { font-size: clamp(43.2px, 10.585vw + 9.329px, 90.62px); }
-  .brands-title { font-size: clamp(21.34px, 2.471vw + 13.433px, 32.41px); margin-bottom: 20px; }   /* size matches name; BRANDS→grid gap 20 */
+  .brands-title { font-size: clamp(23.34px, 2.025vw + 16.861px, 32.41px); margin-bottom: 20px; }   /* size matches name; BRANDS→grid gap 20 */
 
   .video-slot {
     width: auto;
