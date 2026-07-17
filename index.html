@@ -48,7 +48,7 @@
         <li>Cinema 4D <span class="rs-full">(Redshift)</span><span class="rs-short">(RS)</span></li>
         <li>Houdini</li>
         <li>After Effects</li>
-        <li>AI</li>
+        <li><a class="bar-link" href="https://www.chromaflow.co.uk" target="_blank" rel="noopener"><span class="roll"><span class="roll-in" data-text="AI">AI</span></span></a></li>
       </ul>
     </div>
   </header>
@@ -102,6 +102,15 @@
               <path d="M29.15,53.97c.68.69,1.58,1.03,2.47,1.03s1.79-.35,2.47-1.03l7.46-7.46,7.46,7.46c.68.69,1.58,1.03,2.47,1.03s1.79-.35,2.47-1.03c1.37-1.37,1.37-3.58,0-4.95h.02l-7.46-7.46,7.46-7.46c1.37-1.37,1.37-3.58,0-4.95s-3.58-1.37-4.95,0l-7.46,7.46-7.46-7.46c-1.37-1.37-3.58-1.37-4.95,0s-1.37,3.58,0,4.95l7.46,7.46-7.46,7.46c-1.37,1.37-1.37,3.58,0,4.95Z" fill="#fff"/>
             </svg>
           </button>
+
+          <!-- Progress / scrub bar (expanded desktop player). Thin 4px black track that grows to
+               8px on hover / while dragging; white fill shows position (rounded left, hard right).
+               The .scrubber wrapper carries a taller invisible hit area (::before) so the thin bar
+               is easy to grab, and lets both track + fill grow together on hover. -->
+          <div class="scrubber" id="scrubber" role="slider" aria-label="Seek video position" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="scrub-track"></div>
+            <div class="scrub-fill" id="scrubFill"></div>
+          </div>
         </div>
       </div>
     </section>
@@ -147,7 +156,7 @@
         <li>Cinema 4D <span class="rs-full">(Redshift)</span><span class="rs-short">(RS)</span></li>
         <li>Houdini</li>
         <li>After Effects</li>
-        <li>AI</li>
+        <li><a class="bar-link" href="https://www.chromaflow.co.uk" target="_blank" rel="noopener"><span class="roll"><span class="roll-in" data-text="AI">AI</span></span></a></li>
       </ul>
     </div>
   </footer>

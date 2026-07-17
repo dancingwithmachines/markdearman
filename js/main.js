@@ -30,9 +30,12 @@
   var ctlPlay  = document.getElementById('ctlPlay');
   var ctlMute  = document.getElementById('ctlMute');
   var ctlClose = document.getElementById('ctlClose');
+  var scrubber   = document.getElementById('scrubber');
+  var scrubFill  = document.getElementById('scrubFill');
 
   var isOpen = false;
   var videoLoaded = false;
+  var scrubbing = false;            // true while dragging the scrub bar
   var expandTimer, collapseTimer;   // fallbacks if transitionend doesn't fire
 
   /* ----- LONDON CLOCK ----------------------------------------------------
@@ -190,6 +193,9 @@
     if (!player.classList.contains('is-floating')) return;
     player.removeEventListener('transitionend', onCollapseEnd);
     clearTimeout(collapseTimer);
+    // Keep the centre play button hidden through the instant snap below so it doesn't
+    // pop back in; we fade it on afterwards (see the requestAnimationFrame at the end).
+    player.classList.add('play-hidden');
     // Snap back to the docked (absolute, inset:0) box WITHOUT animating the swap.
     // Clearing the inline fixed coords while the transition is live re-triggers a
     // scale animation (the "repeat scale-in" bug) — so disable it for the snap.
@@ -199,9 +205,13 @@
     player.style.left = '';
     player.style.width = '';
     player.style.height = '';
-    void player.offsetWidth;        // commit the docked position instantly
+    void player.offsetWidth;        // commit the docked position + hidden play button
     player.style.transition = '';   // restore the CSS transition
     try { videoEl.currentTime = 0; } catch (_) {}
+    updateScrub();                  // reset the progress fill to the start
+    // Next frame: drop play-hidden so the play button fades from 0 → 1 (--t-ctl)
+    // rather than snapping into view.
+    requestAnimationFrame(function () { player.classList.remove('play-hidden'); });
   }
 
   /* ----- MOBILE: native fullscreen -------------------------------------- */
@@ -237,6 +247,46 @@
     player.classList.toggle('is-muted', videoEl.muted);
   }
 
+  /* ----- SCRUB BAR (expanded desktop player) -----------------------------
+     Seeking works because the reel is on R2 (serves HTTP range requests) and the
+     encodes are faststart. NB: won't seek when the PAGE is served by a no-range
+     dev server, but the video itself streams from R2 so it seeks in a real load. */
+  function updateScrub() {
+    var d = videoEl.duration;
+    if (!d || !isFinite(d)) return;
+    var frac = Math.min(1, videoEl.currentTime / d);
+    scrubFill.style.width = (frac * scrubber.getBoundingClientRect().width) + 'px';
+    scrubber.setAttribute('aria-valuenow', Math.round(frac * 100));
+  }
+
+  function seekToClientX(clientX) {
+    var d = videoEl.duration;
+    if (!d || !isFinite(d)) return;
+    var r = scrubber.getBoundingClientRect();
+    var frac = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+    videoEl.currentTime = frac * d;
+    updateScrub();
+  }
+
+  scrubber.addEventListener('mousedown', function (e) {
+    e.stopPropagation();            // don't bubble to the player
+    e.preventDefault();             // no text selection while dragging
+    scrubbing = true;
+    scrubber.classList.add('is-scrubbing');   // keep the bar expanded through the drag
+    seekToClientX(e.clientX);
+  });
+  document.addEventListener('mousemove', function (e) { if (scrubbing) seekToClientX(e.clientX); });
+  document.addEventListener('mouseup', function () {
+    if (!scrubbing) return;
+    scrubbing = false;
+    scrubber.classList.remove('is-scrubbing');
+    // If the drag ended off the player, hide the controls again.
+    if (!player.matches(':hover')) player.classList.remove('controls-visible');
+  });
+
+  videoEl.addEventListener('timeupdate', updateScrub);
+  videoEl.addEventListener('loadedmetadata', updateScrub);
+
   /* ----- EVENTS ---------------------------------------------------------- */
   // Whole docked box is clickable; once open, inside clicks don't close.
   player.addEventListener('click', function () { if (!isOpen) activate(); });
@@ -258,13 +308,14 @@
   // player and it expands under a stationary cursor, so mouseenter never fires — any
   // movement then reveals the controls (standard video-player behaviour).
   player.addEventListener('mousemove', function () { if (isOpen) player.classList.add('controls-visible'); });
-  player.addEventListener('mouseleave', function () { player.classList.remove('controls-visible'); });
+  player.addEventListener('mouseleave', function () { if (!scrubbing) player.classList.remove('controls-visible'); });
 
-  // Keep the expanded player centred on resize.
+  // Keep the expanded player centred on resize (and the scrub fill sized to it).
   window.addEventListener('resize', function () {
     if (!isOpen) return;
     var t = computeTarget();
     setBox(player, t.top, t.left, t.width, t.height);
+    updateScrub();
   });
 
   // Loop on both platforms.
