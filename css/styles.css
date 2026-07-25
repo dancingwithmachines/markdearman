@@ -24,12 +24,12 @@
 
 /* ---------- Tokens ---------- */
 :root {
-  --bg: #000;
+  --bg: #bcc4c2;
   --fg: #fff;
-  --label: #d2d2d2;
-  --muted: #8c8c8c;
-  --box: #161616;
-  --video-bg: #202020;
+  --label: #717674;
+  --muted: #717674;
+  --box: #cbd2d2;
+  --video-bg: #bcc4c2;
 
   --max: 1280px;
   --gutter: 20px;
@@ -93,7 +93,7 @@ button { font: inherit; color: inherit; }
 /* Link rollover — vertical text roll. The label rolls up out of view while an
    identical clone rolls up into its place from below (masked by .roll).
    ease-out-quart, 0.667s; one transition covers both roll-on and roll-off. */
-.bar-link { display: inline-block; width: fit-content; color: var(--fg); }
+.bar-link { display: inline-block; width: fit-content; color: var(--fg); font-weight: 700; }
 .roll { display: inline-block; overflow: hidden; vertical-align: top; }
 .roll-in { display: block; position: relative; transition: transform var(--t-roll) var(--quart-out); }
 .roll-in::after {
@@ -123,6 +123,7 @@ button { font: inherit; color: inherit; }
 .hero-name {
   grid-column: 1 / -1;
   margin: 0 0 40px;
+  color: var(--muted);
   font-family: var(--display);
   font-size: clamp(28px, 4.22vw, 54px);   /* matches BRANDS (54px on desktop) */
   letter-spacing: 0.04em;
@@ -188,10 +189,22 @@ button { font: inherit; color: inherit; }
 
 /* While expanded: poster fades out (during the scale-up, and back in on collapse) */
 .video-player.is-expanded .video-poster { opacity: 0; }
-/* Video fades in once the box is full size; drops to 60% while controls are visible.
+/* Video fades in once the box is full size, then stays fully opaque.
    Tied to video-ready (not is-playing) so pausing keeps the frame visible. */
 .video-player.is-expanded.video-ready .video-el { opacity: 1; }
-.video-player.is-expanded.video-ready.controls-visible .video-el { opacity: 0.6; }
+
+/* Dim overlay — sits above the video and behind the controls (by DOM order).
+   Fades to 20% black while the controls are visible, instead of dimming the
+   video itself (which would reveal the box background). */
+.video-dim {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--t-ctl) var(--quart-out);
+}
+.video-player.is-dimmable.controls-visible .video-dim { opacity: 0.2; }
 
 /* ---------- Controls (shared) — supplied SVG artwork ---------- */
 .ctl {
@@ -211,13 +224,16 @@ button { font: inherit; color: inherit; }
   width: clamp(57.6px, 24vw - 19.2px, 96px);
   height: clamp(57.6px, 24vw - 19.2px, 96px);
 }
-/* hover: outer ring shrinks 30% while stroke stays constant (3 / 0.7 = 4.286) */
+/* Ring thickness set in CSS (overrides the SVG's stroke-width=3 attribute).
+   In viewBox units: 3.847 renders as 3px at the 96px button (3 × 123.11/96).
+   hover: outer ring shrinks 30% while stroke stays constant (3.847 / 0.7 = 5.496). */
 .ctl-play .ctl-circle {
+  stroke-width: 3.847px;
   transform-box: fill-box; transform-origin: center;
   transition: transform var(--t-play) var(--quart-out), stroke-width var(--t-play) var(--quart-out);
 }
 @media (hover: hover) {
-  .ctl-play:hover .ctl-circle { transform: scale(0.7); stroke-width: 4.286px; }
+  .ctl-play:hover .ctl-circle { transform: scale(0.7); stroke-width: 5.496px; }
 }
 .icon-pause, .icon-unmute { display: none; }
 .video-player.is-playing .icon-play { display: none; }
@@ -228,6 +244,10 @@ button { font: inherit; color: inherit; }
 .ctl-mute, .ctl-close { width: 52px; height: 52px; }
 .ctl-mute  { top: 22px; left: 22px; }
 .ctl-close { top: 22px; right: 22px; }
+/* Bump the ring thickness in CSS (overrides the SVG stroke-width=3): 4 user units
+   renders ~2.5px at the 52px button — a step up toward the play/pause 3px ring
+   without looking chunky on the smaller buttons. */
+.ctl-mute svg circle, .ctl-close svg circle { stroke-width: 4px; }
 @media (hover: hover) {
   .ctl-mute:hover, .ctl-close:hover { transform: scale(0.8); }
 }
@@ -276,7 +296,7 @@ button { font: inherit; color: inherit; }
   pointer-events: none;                 /* interaction is handled on .scrubber */
   transition: height var(--t-ctl) var(--quart-out), border-radius var(--t-ctl) var(--quart-out);
 }
-.scrub-track { right: 0; background: #000; border-radius: 2px; }
+.scrub-track { right: 0; background: #717674; border-radius: 2px; }
 .scrub-fill  { width: 0; background: #fff; border-radius: 2px 0 0 2px; }   /* rounded left, hard right */
 /* Grow to 8px on hover / while dragging */
 .scrubber:hover .scrub-track,
@@ -315,6 +335,7 @@ body.video-open .video-slot { z-index: 70; }
 .brands-title {
   font-family: var(--display);
   font-weight: 400;
+  color: var(--muted);
   font-size: clamp(28px, 4.22vw, 54px);   /* 54px on desktop, matches the name */
   margin: 0 0 36px;
 }

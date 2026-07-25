@@ -37,6 +37,7 @@
   var videoLoaded = false;
   var scrubbing = false;            // true while dragging the scrub bar
   var expandTimer, collapseTimer;   // fallbacks if transitionend doesn't fire
+  var dimTimer;                     // delays the hover-dim until the video has faded in
 
   /* ----- LONDON CLOCK ----------------------------------------------------
      Ticks every second in Europe/London (the time auto-tracks GMT/BST). The
@@ -158,6 +159,11 @@
       });
     }
     player.classList.add('is-playing');
+
+    // Enable the hover-dim only AFTER the video has faded in, so the reel fades
+    // in over the clean website-colour background (no dark tint during open).
+    clearTimeout(dimTimer);
+    dimTimer = setTimeout(function () { player.classList.add('is-dimmable'); }, 400);
   }
 
   /* ----- CLOSE (collapse back to docked) -------------------------------- */
@@ -166,7 +172,8 @@
     isOpen = false;
 
     videoEl.pause();
-    player.classList.remove('is-playing', 'controls-visible', 'video-ready', 'is-expanded');
+    clearTimeout(dimTimer);
+    player.classList.remove('is-playing', 'controls-visible', 'video-ready', 'is-expanded', 'is-dimmable');
     heroType.style.transform = '';
     if (heroName) heroName.style.transform = '';
     if (headerEl) headerEl.style.transform = '';

@@ -63,6 +63,10 @@
           <img class="video-poster" id="videoPoster" src="assets/video_poster.png" alt="">
           <video class="video-el" id="videoEl" loop playsinline preload="none"></video>
 
+          <!-- Dim overlay: fades in above the video (behind the controls) while the
+               controls are visible, so the reel darkens without revealing the box bg. -->
+          <div class="video-dim" aria-hidden="true"></div>
+
           <!-- Center play / pause (docked: opens; open: toggles playback).
                Uses supplied artwork. The ring is a separate <circle> so it can
                shrink 30% on hover while stroke-width stays constant. -->
