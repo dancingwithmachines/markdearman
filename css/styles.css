@@ -189,7 +189,9 @@ button { font: inherit; color: inherit; }
 
 /* While expanded: poster fades out (during the scale-up, and back in on collapse) */
 .video-player.is-expanded .video-poster { opacity: 0; }
-/* Video fades in once the box is full size, then stays fully opaque.
+/* Video fades in once it actually has a frame (video-ready is added on the video's
+   own ready event — see revealVideo — NOT when the box finishes expanding), so it
+   visibly fades in instead of popping the first frame in at full opacity.
    Tied to video-ready (not is-playing) so pausing keeps the frame visible. */
 .video-player.is-expanded.video-ready .video-el { opacity: 1; }
 
@@ -324,6 +326,16 @@ body.video-open .video-backdrop { opacity: 1; pointer-events: auto; }
    and click on the player. Raising the whole container above the backdrop fixes it;
    outside-the-player clicks still land on the backdrop (which fills the viewport). */
 body.video-open .video-slot { z-index: 70; }
+
+/* Lifting the slot to 70 (above) also raised it above the hero title (z-index:2),
+   which made the text snap BEHIND the player the instant it was clicked. Keep the
+   title above the lifted slot so it animates up and OFF the player as intended.
+   pointer-events:none so clicks in the raised title area still reach the backdrop
+   to close. Both parts of the title block are raised so they stay in front while
+   the block animates up together. Scoped to video-open, so on collapse (video-open
+   removed first) the slot drops back to 1 and the title returns to its normal order. */
+body.video-open .hero-name,
+body.video-open .hero-type { z-index: 80; pointer-events: none; }
 
 /* ============================================================
    BRANDS

@@ -38,6 +38,7 @@
   var scrubbing = false;            // true while dragging the scrub bar
   var expandTimer, collapseTimer;   // fallbacks if transitionend doesn't fire
   var dimTimer;                     // delays the hover-dim until the video has faded in
+  var revealTimer;                  // fallback to reveal the video if its events never fire
 
   /* ----- LONDON CLOCK ----------------------------------------------------
      Ticks every second in Europe/London (the time auto-tracks GMT/BST). The
@@ -142,12 +143,13 @@
   // Idempotent: runs once per open, whichever fires first (transitionend or timer).
   function finishExpand() {
     if (!isOpen) return;
-    if (player.classList.contains('video-ready')) return;
+    if (player.classList.contains('is-playing')) return;
     player.removeEventListener('transitionend', onExpandEnd);
     clearTimeout(expandTimer);
 
-    // Container is full size: fade the video in and start playing.
-    player.classList.add('video-ready');
+    // Container is full size: start playing. The poster is held (still visible)
+    // until the video actually has a frame — see revealVideo — so the crossfade
+    // happens over real content instead of the video popping in over the gap.
     videoEl.muted = false;
     player.classList.toggle('is-muted', videoEl.muted);
     var p = videoEl.play();
@@ -159,6 +161,27 @@
       });
     }
     player.classList.add('is-playing');
+
+    // Reveal only once the video is genuinely presenting frames, so it crossfades
+    // in from the held poster rather than fading an empty element (then popping the
+    // first frame in at full opacity). Fallback fires if the events never do.
+    if (videoEl.readyState >= 2) {      // HAVE_CURRENT_DATA — a frame is available
+      revealVideo();
+    } else {
+      videoEl.addEventListener('playing', revealVideo, { once: true });
+      videoEl.addEventListener('loadeddata', revealVideo, { once: true });
+      clearTimeout(revealTimer);
+      revealTimer = setTimeout(revealVideo, 1500);
+    }
+  }
+
+  // Crossfade the poster out + video in. Gated on a real frame existing (called
+  // from finishExpand once the video is ready). Idempotent.
+  function revealVideo() {
+    if (!isOpen) return;
+    if (player.classList.contains('video-ready')) return;
+    clearTimeout(revealTimer);
+    player.classList.add('video-ready');
 
     // Enable the hover-dim only AFTER the video has faded in, so the reel fades
     // in over the clean website-colour background (no dark tint during open).
@@ -173,6 +196,9 @@
 
     videoEl.pause();
     clearTimeout(dimTimer);
+    clearTimeout(revealTimer);
+    videoEl.removeEventListener('playing', revealVideo);
+    videoEl.removeEventListener('loadeddata', revealVideo);
     player.classList.remove('is-playing', 'controls-visible', 'video-ready', 'is-expanded', 'is-dimmable');
     heroType.style.transform = '';
     if (heroName) heroName.style.transform = '';
