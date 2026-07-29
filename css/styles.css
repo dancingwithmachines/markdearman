@@ -185,7 +185,7 @@ button { font: inherit; color: inherit; }
   object-fit: cover;
 }
 .video-poster { opacity: 1; transition: opacity var(--t-exp) var(--quart-in-out); }
-.video-el { opacity: 0; transition: opacity var(--t-ctl) var(--quart-out); }
+.video-el { opacity: 0; transition: opacity 0.5s var(--quart-out); }
 
 /* While expanded: poster fades out (during the scale-up, and back in on collapse) */
 .video-player.is-expanded .video-poster { opacity: 0; }
